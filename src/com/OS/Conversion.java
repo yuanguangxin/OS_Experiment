@@ -83,6 +83,14 @@ public class Conversion {
         }
     }
 
+    public Process getBlockFirst(){
+        if(blocked.size()!=0) {
+            return blocked.getFirst();
+        }else{
+            return null;
+        }
+    }
+
     //唤醒进程
     public void wakeUpProcess() {
         if (blocked.size() != 0) {

@@ -1,10 +1,13 @@
 package com.OS;
 
+import com.IO.IOSystem;
+
 import java.util.Random;
 import java.util.Scanner;
 
 public class Test {
     public static Memory memory = new Memory();
+    public static IOSystem system = new IOSystem();
     static int meta_F = 0;
     static int meta_L = 0;
     static int total = 0;
@@ -16,12 +19,13 @@ public class Test {
         System.out.println("请输入数字控制进程");
         System.out.println("1.创建进程");
         System.out.println("2.时间片到");
-        System.out.println("3.进程阻塞");
-        System.out.println("4.唤醒进程");
+        System.out.println("3.进程阻塞(申请分配设备)");
+        System.out.println("4.唤醒进程(释放设备)");
         System.out.println("5.结束进程");
         System.out.println("6.显示进程状态");
         System.out.println("7.访问逻辑地址");
         System.out.println("8.显示内存位示图");
+        System.out.println("9.查看设备分配表");
         System.out.println("0.退出");
         String processName;
         choose = in.nextInt();
@@ -103,10 +107,86 @@ public class Test {
                 conversion.printState();
                 break;
             case 3:
-                conversion.processBlock();
+                if(Conversion.getRunning()==null){
+                    System.out.println("还没有执行的进程！");
+                    break;
+                }
+                Process process2 = Conversion.getRunning();
+                System.out.println("请选择申请的设备：");
+                int m;
+                for(int i = 0;i<IOSystem.dcts.size();i++){
+                    System.out.println((i+1)+"："+IOSystem.dcts.get(i).getName());
+                }
+                m = in.nextInt();
+                if(IOSystem.dcts.get(m-1).getProcess()==null&&IOSystem.dcts.get(m-1).getParent().getProcess()==null&&IOSystem.dcts.get(m-1).getParent().getParent().getProcess()==null){
+                    IOSystem.dcts.get(m-1).setProcess(process2);
+                    IOSystem.dcts.get(m-1).getParent().setProcess(process2);
+                    IOSystem.dcts.get(m-1).getParent().getParent().setProcess(process2);
+                    System.out.println("分配成功");
+                    conversion.processBlock();
+                }else{
+                    if(IOSystem.dcts.get(m-1).getProcess()!=null){
+                        IOSystem.dcts.get(m-1).getWaitingList().add(process2);
+                    }else{
+                        IOSystem.dcts.get(m-1).setProcess(process2);
+                        if(IOSystem.dcts.get(m-1).getParent().getProcess()!=null){
+                            IOSystem.dcts.get(m-1).getParent().getWaitingList().add(process2);
+                        }else{
+                            IOSystem.dcts.get(m-1).getParent().setProcess(process2);
+                            if(IOSystem.dcts.get(m-1).getParent().getParent().getProcess()!=null){
+                                IOSystem.dcts.get(m-1).getParent().getParent().getWaitingList().add(process2);
+                            }else {
+                                if(IOSystem.dcts.get(m-1).getParent().getParent().getProcess()!=null){
+                                    IOSystem.dcts.get(m-1).getParent().getParent().getWaitingList().add(process2);
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("分配失败，已加入等待队列");
+                    conversion.processBlock();
+                }
                 conversion.printState();
                 break;
             case 4:
+                Process process3 = conversion.getBlockFirst();
+                if(process3==null){
+                    System.out.println("没有阻塞进程！");
+                    break;
+                }
+                for(int i = 0;i<IOSystem.dcts.size();i++){
+                    System.out.println(IOSystem.dcts.get(0).getProcess().getName());
+                    System.out.println(process3.getName());
+                    if(IOSystem.dcts.get(i).getProcess()!=null) {
+                        if (IOSystem.dcts.get(i).getProcess().equals(process3)) {
+                            if (IOSystem.dcts.get(i).getWaitingList().size() != 0) {
+                                Process process4 = IOSystem.dcts.get(i).getWaitingList().get(0);
+                                IOSystem.dcts.get(i).getWaitingList().remove(0);
+                                IOSystem.dcts.get(i).setProcess(process4);
+                            } else {
+                                IOSystem.dcts.get(i).setProcess(null);
+                            }
+                            if (IOSystem.dcts.get(i).getParent().getProcess().equals(process3)) {
+                                if (IOSystem.dcts.get(i).getParent().getWaitingList().size() != 0) {
+                                    Process process5 = IOSystem.dcts.get(i).getParent().getWaitingList().get(0);
+                                    IOSystem.dcts.get(i).getParent().getWaitingList().remove(0);
+                                    IOSystem.dcts.get(i).getParent().setProcess(process5);
+                                } else {
+                                    IOSystem.dcts.get(i).getParent().setProcess(null);
+                                }
+                            }
+                            if (IOSystem.dcts.get(i).getParent().getParent().getProcess().equals(process3)) {
+                                if (IOSystem.dcts.get(i).getParent().getParent().getWaitingList().size() != 0) {
+                                    Process process6 = IOSystem.dcts.get(i).getParent().getParent().getWaitingList().get(0);
+                                    IOSystem.dcts.get(i).getParent().getParent().getWaitingList().remove(0);
+                                    IOSystem.dcts.get(i).getParent().getParent().setProcess(process6);
+                                } else {
+                                    IOSystem.dcts.get(i).getParent().getParent().setProcess(null);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
                 conversion.wakeUpProcess();
                 conversion.printState();
                 break;
@@ -226,6 +306,9 @@ public class Test {
                 break;
             case 8:
                 memory.showBitMap();
+                break;
+            case 9:
+                system.showIOSystem();
                 break;
         }
         return choose;
