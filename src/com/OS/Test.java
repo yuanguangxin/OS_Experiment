@@ -1,6 +1,7 @@
 package com.OS;
 
 import com.IO.IOSystem;
+import com.file.CMD;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class Test {
         System.out.println("7.访问逻辑地址");
         System.out.println("8.显示内存位示图");
         System.out.println("9.查看设备分配表");
+        System.out.println("10.文件管理");
         System.out.println("0.退出");
         String processName;
         choose = in.nextInt();
@@ -309,6 +311,9 @@ public class Test {
                 break;
             case 9:
                 system.showIOSystem();
+                break;
+            case 10:
+                new CMD(1,8);
                 break;
         }
         return choose;

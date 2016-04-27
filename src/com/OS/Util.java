@@ -1,5 +1,8 @@
 package com.OS;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Util {
 
     public static PageList[] toFirst(int index, PageList[] dataArray){
@@ -37,4 +40,10 @@ public class Util {
         return array;
     }
 
+    public static String getDate(){
+        Date date =new Date();
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dates=format.format(date);
+        return dates;
+    }
 }
