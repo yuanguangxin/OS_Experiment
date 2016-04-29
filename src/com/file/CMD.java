@@ -5,7 +5,6 @@ import com.OS.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import java.util.regex.Pattern;
 
 public class CMD extends JFrame implements KeyListener {
@@ -13,6 +12,7 @@ public class CMD extends JFrame implements KeyListener {
     public static final int LAST_BLOCK = -1;
     private FCB root = new FCB();
     private JTextArea jt1 = new JTextArea();
+    private JScrollPane jsp1;
     private FAT fat;
     private BIT bit;
     private String path = new String("Administrator@С▒▒▒▒ MINGW64 ~");
@@ -28,7 +28,8 @@ public class CMD extends JFrame implements KeyListener {
         jt1.setBackground(Color.BLACK);
         jt1.setText("\n" + path + "\n" + "$ ");
         jt1.addKeyListener(this);
-        this.add(jt1);
+        jsp1 = new JScrollPane(jt1);
+        this.add(jsp1);
         this.setSize(500, 600);
         this.setLocation(400, 80);
         this.setTitle("cmd.exe");
@@ -42,7 +43,7 @@ public class CMD extends JFrame implements KeyListener {
         root.setDatetime(Util.getDate());
         root.setSize(1);
         root.setFirstBlock(0);
-        root.setParent(null);
+        root.setParent(root);
         currentDirectory = root;
         this.fat.getFatTable()[0] = "-1";
         this.fat.repaint();
