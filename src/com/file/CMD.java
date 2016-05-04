@@ -5,6 +5,7 @@ import com.OS.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.regex.Pattern;
 
 public class CMD extends JFrame implements KeyListener {
@@ -51,10 +52,6 @@ public class CMD extends JFrame implements KeyListener {
         this.bit.repaint();
     }
 
-    public static void main(String[] args) {
-        new CMD(1, 8);
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -99,6 +96,8 @@ public class CMD extends JFrame implements KeyListener {
                         fcb.setParent(currentDirectory);
                         fcb.setFirstBlock(blockNum);
                         currentDirectory.addChildren(fcb);
+                        File file = new File(wholeName);
+                        file.mkdir();
                     } else {
                         System.out.println("磁盘空间已满！");
                     }
@@ -143,10 +142,10 @@ public class CMD extends JFrame implements KeyListener {
                     }
                 }
             } else if (op.equals("dir") || op.equals("DIR")) {
+
                 String s = this.jt1.getText();
                 s+=currentDirectory.showAllChildren();
                 this.jt1.setText(s);
-               // System.out.println(currentDirectory.showAllChildren());
             } else if (op.
                     equals("mk") || op.equals("MK")) {
                 if(ops.length!=3){
@@ -189,6 +188,21 @@ public class CMD extends JFrame implements KeyListener {
                                 fcb.setType(1);
                                 fcb.setName(currentDirectory.getName() + "/" + partName);
                                 fcb.setSize(size);
+
+                                byte[] buf = new byte[8192];
+                                long n = size*1024;
+                                try {
+                                    FileOutputStream fos = new FileOutputStream(currentDirectory.getName() + "/" + partName);
+                                    long m = n / buf.length;
+                                    for (long i = 0; i < m; i++) {
+                                        fos.write(buf, 0, buf.length);
+                                    }
+                                    fos.write(buf, 0, (int) (n % buf.length));
+                                    fos.close();
+                                }catch (Exception e1){
+                                    e1.printStackTrace();
+                                }
+
                                 int[] ff = new int[nums];
                                 for (int i = 0; i < nums; i++) {
                                     for (int j = 0; j < this.bit.getBits().length; j++) {
@@ -257,5 +271,8 @@ public class CMD extends JFrame implements KeyListener {
             s = s + "\n" + path + "\n" + "$ ";
             jt1.setText(s);
         }
+    }
+    public static void main(String[] args) throws Exception{
+        new CMD(1, 4);
     }
 }

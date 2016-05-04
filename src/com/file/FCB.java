@@ -9,7 +9,7 @@ public class FCB {
     private int type;
     private String datetime;
     private FCB parent;
-    private static ArrayList<FCB> children = new ArrayList<>();
+    private ArrayList<FCB> children = new ArrayList<>();
 
     public FCB getParent() {
         return parent;
@@ -51,11 +51,17 @@ public class FCB {
 
     public String showAllChildren(){
         String message = "";
+        String type = new String();
         for(int i = 0;i<children.size();i++){
             if(children.get(i).getType()!=0) {
+                if(children.get(i).getType()==1){
+                    type = "File" + "(" + children.get(i).getSize()+"kb)";
+                }else{
+                    type = "Directory";
+                }
                 String[] names = children.get(i).getName().split("/");
                 String partName = names[names.length - 1];
-                message += children.get(i).getDatetime() + "\t" + partName + "\n";
+                message += children.get(i).getDatetime() + "\t" + partName + "\t"+ type + "\n";
             }
         }
         return message;
