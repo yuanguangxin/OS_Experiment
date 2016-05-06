@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="943cf4fa-59fd-4648-bae7-cbaf4a9050e1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/file/FileTree.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/file/CMD.java" afterPath="$PROJECT_DIR$/src/com/file/CMD.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/file/FCB.java" afterPath="$PROJECT_DIR$/src/com/file/FCB.java" />
     </list>
     <ignored path="OS_Experiment.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +29,8 @@
       <file leaf-file-name="CMD.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/file/CMD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4247934">
-              <caret line="232" column="46" selection-start-line="232" selection-start-column="46" selection-end-line="232" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.7123967">
+              <caret line="328" column="1" selection-start-line="328" selection-start-column="1" selection-end-line="328" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -90,8 +88,8 @@
         <option value="$PROJECT_DIR$/src/com/file/FCB.java" />
         <option value="$PROJECT_DIR$/src/com/OS/TreeDemo.java" />
         <option value="$PROJECT_DIR$/src/com/file/TreeDemo.java" />
-        <option value="$PROJECT_DIR$/src/com/file/CMD.java" />
         <option value="$PROJECT_DIR$/src/com/file/FileTree.java" />
+        <option value="$PROJECT_DIR$/src/com/file/CMD.java" />
       </list>
     </option>
   </component>
@@ -830,7 +828,7 @@
       <workItem from="1462271915290" duration="3749000" />
       <workItem from="1462324533202" duration="44000" />
       <workItem from="1462345241933" duration="313000" />
-      <workItem from="1462509124280" duration="7837000" />
+      <workItem from="1462509124280" duration="8812000" />
     </task>
     <task id="LOCAL-00001" summary="version upgrade">
       <created>1460459734670</created>
@@ -886,11 +884,17 @@
       <option name="project" value="LOCAL" />
       <updated>1462345264583</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add FileTree(Use JTree)">
+      <created>1462517040690</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1462517040690</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129339000" />
+    <option name="totallyTimeSpent" value="130314000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -962,7 +966,8 @@
     <MESSAGE value="update" />
     <MESSAGE value="Add File Management" />
     <MESSAGE value="fix bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bugs" />
+    <MESSAGE value="add FileTree(Use JTree)" />
+    <option name="LAST_COMMIT_MESSAGE" value="add FileTree(Use JTree)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1293,8 +1298,8 @@
         <state vertical-scroll-proportion="0.3322314">
           <caret line="82" column="12" selection-start-line="82" selection-start-column="12" selection-end-line="82" selection-end-column="12" />
           <folding>
-            <element signature="e#2330#2331#0" expanded="true" />
-            <element signature="e#2363#2364#0" expanded="true" />
+            <element signature="e#2330#2331#0" expanded="false" />
+            <element signature="e#2363#2364#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1318,28 +1323,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/file/FCB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28760332">
-          <caret line="6" column="20" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/javax/swing/tree/DefaultMutableTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3322314">
           <caret line="1085" column="19" selection-start-line="1085" selection-start-column="19" selection-end-line="1085" selection-end-column="19" />
           <folding>
-            <element signature="e#36544#36545#0" expanded="true" />
-            <element signature="e#36589#36590#0" expanded="true" />
+            <element signature="e#36544#36545#0" expanded="false" />
+            <element signature="e#36589#36590#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/file/FCB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0743802">
+          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/file/FileTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6644628">
+        <state vertical-scroll-proportion="1.2942148">
           <caret line="64" column="13" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1349,8 +1354,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/file/CMD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4247934">
-          <caret line="232" column="46" selection-start-line="232" selection-start-column="46" selection-end-line="232" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.7123967">
+          <caret line="328" column="1" selection-start-line="328" selection-start-column="1" selection-end-line="328" selection-end-column="1" />
           <folding />
         </state>
       </provider>

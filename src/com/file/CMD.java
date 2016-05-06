@@ -62,7 +62,7 @@ public class CMD extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
     }
 
-    public void deleteFile(FCB fcb){
+    public void deleteFile(FCB fcb) {
         int firstBlock = fcb.getFirstBlock();
         int temp = firstBlock;
         while (!this.fat.getFatTable()[temp].equals("-1")) {
@@ -78,7 +78,7 @@ public class CMD extends JFrame implements KeyListener {
         fcb.deleteFile();
     }
 
-    public void deleteDirectory(FCB fcb){
+    public void deleteDirectory(FCB fcb) {
         ArrayList<FCB> list = fcb.getChildren();
         int i = fcb.getFirstBlock();
         this.fat.getFatTable()[i] = "";
@@ -86,10 +86,10 @@ public class CMD extends JFrame implements KeyListener {
         this.bit.getBits()[i] = 0;
         this.bit.repaint();
         fcb.deleteFile();
-        for(int j = 0;j<list.size();j++){
-            if(list.get(j).getType()==1){
+        for (int j = 0; j < list.size(); j++) {
+            if (list.get(j).getType() == 1) {
                 this.deleteFile(list.get(j));
-            }else if(list.get(j).getType()==2){
+            } else if (list.get(j).getType() == 2) {
                 this.deleteDirectory(list.get(j));
             }
         }
@@ -137,35 +137,35 @@ public class CMD extends JFrame implements KeyListener {
                     }
                 } else {
                     String s = this.jt1.getText();
-                    s+="Directory is already exist！" + "\n";
+                    s += "Directory is already exist！" + "\n";
                     this.jt1.setText(s);
                     //System.out.println("Directory is already exist！");
                 }
             } else if (op.equals("cd") || op.equals("CD")) {
                 String partPath = ops[1];
                 String wholePath = currentDirectory.getName() + "/" + partPath;
-                if (!currentDirectory.isAvailable(wholePath)&&currentDirectory.findByName(wholePath).getType()!=1) {
+                if (!currentDirectory.isAvailable(wholePath) && currentDirectory.findByName(wholePath).getType() != 1) {
                     path = "Administrator@С▒▒▒▒ MINGW64 " + wholePath;
                     currentDirectory = currentDirectory.findByName(wholePath);
                 } else {
                     String s = this.jt1.getText();
-                    s+="No such file or directory！" + "\n";
+                    s += "No such file or directory！" + "\n";
                     this.jt1.setText(s);
-                   // System.out.println("No such file or directory！");
+                    // System.out.println("No such file or directory！");
                 }
             } else if (op.equals("rd") || op.equals("RD")) {
-                if(ops.length!=2){
+                if (ops.length != 2) {
                     String s = this.jt1.getText();
-                    s+="输入格式错误！" + "\n";
+                    s += "输入格式错误！" + "\n";
                     this.jt1.setText(s);
-                }else {
+                } else {
                     String partPath = ops[1];
                     String wholePath = currentDirectory.getName() + "/" + partPath;
                     if (!currentDirectory.isAvailable(wholePath)) {
                         FCB fcb = this.currentDirectory.findByName(wholePath);
-                        if(fcb.getType()==2) {
-                           this.deleteDirectory(fcb);
-                        }else{
+                        if (fcb.getType() == 2) {
+                            this.deleteDirectory(fcb);
+                        } else {
                             String s = this.jt1.getText();
                             s += "No such directory！" + "\n";
                             this.jt1.setText(s);
@@ -180,15 +180,15 @@ public class CMD extends JFrame implements KeyListener {
             } else if (op.equals("dir") || op.equals("DIR")) {
 
                 String s = this.jt1.getText();
-                s+=currentDirectory.showAllChildren();
+                s += currentDirectory.showAllChildren();
                 this.jt1.setText(s);
             } else if (op.
                     equals("mk") || op.equals("MK")) {
-                if(ops.length!=3){
+                if (ops.length != 3) {
                     String s = this.jt1.getText();
-                    s+="输入格式错误！" + "\n";
+                    s += "输入格式错误！" + "\n";
                     this.jt1.setText(s);
-                }else {
+                } else {
                     String partName = ops[1];
                     int leftSize = 0;
                     if (currentDirectory.isAvailable(currentDirectory.getName() + "/" + ops[1])) {
@@ -273,7 +273,7 @@ public class CMD extends JFrame implements KeyListener {
                         // System.out.println("File is already exist！");
                     }
                 }
-            }else if(op.equals("del")||op.equals("DEL")) {
+            } else if (op.equals("del") || op.equals("DEL")) {
                 if (ops.length != 2) {
                     String s = this.jt1.getText();
                     s += "输入格式错误！" + "\n";
@@ -281,7 +281,7 @@ public class CMD extends JFrame implements KeyListener {
                 } else {
                     String partName = ops[1];
                     FCB fcb = currentDirectory.findByName(currentDirectory.getName() + "/" + partName);
-                    if (fcb!=null) {
+                    if (fcb != null) {
                         if (fcb.getType() == 1) {
                             deleteFile(fcb);
                         } else {
@@ -289,21 +289,29 @@ public class CMD extends JFrame implements KeyListener {
                             s += "No such file！" + "\n";
                             this.jt1.setText(s);
                         }
-                    }else{
+                    } else {
                         String s = this.jt1.getText();
                         s += "No such file！" + "\n";
                         this.jt1.setText(s);
                     }
                 }
-            }else if(op.equals("cd..")||op.equals("CD..")){
+            } else if (op.equals("cd..") || op.equals("CD..")) {
                 currentDirectory = currentDirectory.getParent();
                 path = "Administrator@С▒▒▒▒ MINGW64 " + currentDirectory.getName();
-            }else if(op.equals("cd/")||op.equals("CD/")){
+            } else if (op.equals("cd/") || op.equals("CD/")) {
                 currentDirectory = root;
                 path = "Administrator@С▒▒▒▒ MINGW64 " + root.getName();
-            }else if(op.equals("tree")||op.equals("TREE")) {
+            } else if (op.equals("tree") || op.equals("TREE")) {
                 fileTree = new FileTree(root);
-            }else{
+            } else if (op.equals("help") || op.equals("HELP")) {
+                String s = this.jt1.getText();
+                String message = "";
+                message = "MD\t创建子目录\n" + "" + "CD\t切换工作空间\n" + "RD\t删除子目录\n" + "MK\t创建文件\n" +
+                        "DEL\t删除文件\n" + "DIR\t列出当前目录所有目录项\n" + "TREE\t查看磁盘文件树形结构\n" +
+                        "showBits\t查看位示图\n" + "showFAT\t查看FAT表\n" + "HELP\t显示帮助信息";
+                s += message;
+                this.jt1.setText(s);
+            } else {
                 String s = this.jt1.getText();
                 s += "输入格式错误！" + "\n";
                 this.jt1.setText(s);
@@ -314,7 +322,8 @@ public class CMD extends JFrame implements KeyListener {
             jt1.setText(s);
         }
     }
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws Exception {
         new CMD(1, 8);
     }
 }
