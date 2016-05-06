@@ -5,12 +5,13 @@ import com.OS.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class CMD extends JFrame implements KeyListener {
     public static final int EMPTY_BLOCK = 0;
     public static final int LAST_BLOCK = -1;
+    public FileTree fileTree = null;
     private FCB root = new FCB();
     private JTextArea jt1 = new JTextArea();
     private JScrollPane jsp1;
@@ -61,6 +62,39 @@ public class CMD extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
     }
 
+    public void deleteFile(FCB fcb){
+        int firstBlock = fcb.getFirstBlock();
+        int temp = firstBlock;
+        while (!this.fat.getFatTable()[temp].equals("-1")) {
+            int tt = Integer.parseInt(this.fat.getFatTable()[temp]);
+            this.fat.getFatTable()[temp] = "";
+            this.bit.getBits()[temp] = 0;
+            temp = tt;
+        }
+        this.fat.getFatTable()[temp] = "";
+        this.bit.getBits()[temp] = 0;
+        this.fat.repaint();
+        this.bit.repaint();
+        fcb.deleteFile();
+    }
+
+    public void deleteDirectory(FCB fcb){
+        ArrayList<FCB> list = fcb.getChildren();
+        int i = fcb.getFirstBlock();
+        this.fat.getFatTable()[i] = "";
+        this.fat.repaint();
+        this.bit.getBits()[i] = 0;
+        this.bit.repaint();
+        fcb.deleteFile();
+        for(int j = 0;j<list.size();j++){
+            if(list.get(j).getType()==1){
+                this.deleteFile(list.get(j));
+            }else if(list.get(j).getType()==2){
+                this.deleteDirectory(list.get(j));
+            }
+        }
+    }
+
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == 10) {
@@ -96,8 +130,8 @@ public class CMD extends JFrame implements KeyListener {
                         fcb.setParent(currentDirectory);
                         fcb.setFirstBlock(blockNum);
                         currentDirectory.addChildren(fcb);
-                        File file = new File(wholeName);
-                        file.mkdir();
+//                        File file = new File(wholeName);
+//                        file.mkdir();
                     } else {
                         System.out.println("磁盘空间已满！");
                     }
@@ -128,15 +162,17 @@ public class CMD extends JFrame implements KeyListener {
                     String partPath = ops[1];
                     String wholePath = currentDirectory.getName() + "/" + partPath;
                     if (!currentDirectory.isAvailable(wholePath)) {
-                        int i = this.currentDirectory.findByName(wholePath).getFirstBlock();
-                        this.fat.getFatTable()[i] = "";
-                        this.fat.repaint();
-                        this.bit.getBits()[i] = 0;
-                        this.bit.repaint();
-                        this.currentDirectory.findByName(wholePath).deleteFile();
+                        FCB fcb = this.currentDirectory.findByName(wholePath);
+                        if(fcb.getType()==2) {
+                           this.deleteDirectory(fcb);
+                        }else{
+                            String s = this.jt1.getText();
+                            s += "No such directory！" + "\n";
+                            this.jt1.setText(s);
+                        }
                     } else {
                         String s = this.jt1.getText();
-                        s += "No such file or directory！" + "\n";
+                        s += "No such directory！" + "\n";
                         this.jt1.setText(s);
                         // System.out.println("No such file or directory！");
                     }
@@ -188,20 +224,20 @@ public class CMD extends JFrame implements KeyListener {
                                 fcb.setType(1);
                                 fcb.setName(currentDirectory.getName() + "/" + partName);
                                 fcb.setSize(size);
-
-                                byte[] buf = new byte[8192];
-                                long n = size*1024;
-                                try {
-                                    FileOutputStream fos = new FileOutputStream(currentDirectory.getName() + "/" + partName);
-                                    long m = n / buf.length;
-                                    for (long i = 0; i < m; i++) {
-                                        fos.write(buf, 0, buf.length);
-                                    }
-                                    fos.write(buf, 0, (int) (n % buf.length));
-                                    fos.close();
-                                }catch (Exception e1){
-                                    e1.printStackTrace();
-                                }
+//
+//                                byte[] buf = new byte[8192];
+//                                long n = size*1024;
+//                                try {
+//                                    FileOutputStream fos = new FileOutputStream(currentDirectory.getName() + "/" + partName);
+//                                    long m = n / buf.length;
+//                                    for (long i = 0; i < m; i++) {
+//                                        fos.write(buf, 0, buf.length);
+//                                    }
+//                                    fos.write(buf, 0, (int) (n % buf.length));
+//                                    fos.close();
+//                                }catch (Exception e1){
+//                                    e1.printStackTrace();
+//                                }
 
                                 int[] ff = new int[nums];
                                 for (int i = 0; i < nums; i++) {
@@ -245,19 +281,19 @@ public class CMD extends JFrame implements KeyListener {
                 } else {
                     String partName = ops[1];
                     FCB fcb = currentDirectory.findByName(currentDirectory.getName() + "/" + partName);
-                    int firstBlock = fcb.getFirstBlock();
-                    int temp = firstBlock;
-                    while (!this.fat.getFatTable()[temp].equals("-1")) {
-                        int tt = Integer.parseInt(this.fat.getFatTable()[temp]);
-                        this.fat.getFatTable()[temp] = "";
-                        this.bit.getBits()[temp] = 0;
-                        temp = tt;
+                    if (fcb!=null) {
+                        if (fcb.getType() == 1) {
+                            deleteFile(fcb);
+                        } else {
+                            String s = this.jt1.getText();
+                            s += "No such file！" + "\n";
+                            this.jt1.setText(s);
+                        }
+                    }else{
+                        String s = this.jt1.getText();
+                        s += "No such file！" + "\n";
+                        this.jt1.setText(s);
                     }
-                    this.fat.getFatTable()[temp] = "";
-                    this.bit.getBits()[temp] = 0;
-                    this.fat.repaint();
-                    this.bit.repaint();
-                    fcb.deleteFile();
                 }
             }else if(op.equals("cd..")||op.equals("CD..")){
                 currentDirectory = currentDirectory.getParent();
@@ -265,6 +301,12 @@ public class CMD extends JFrame implements KeyListener {
             }else if(op.equals("cd/")||op.equals("CD/")){
                 currentDirectory = root;
                 path = "Administrator@С▒▒▒▒ MINGW64 " + root.getName();
+            }else if(op.equals("tree")||op.equals("TREE")) {
+                fileTree = new FileTree(root);
+            }else{
+                String s = this.jt1.getText();
+                s += "输入格式错误！" + "\n";
+                this.jt1.setText(s);
             }
 
             String s = this.jt1.getText();
@@ -273,6 +315,6 @@ public class CMD extends JFrame implements KeyListener {
         }
     }
     public static void main(String[] args) throws Exception{
-        new CMD(1, 4);
+        new CMD(1, 8);
     }
 }
