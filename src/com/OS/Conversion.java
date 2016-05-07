@@ -154,21 +154,25 @@ public class Conversion {
         int time = 0;
         LinkedList<Process> newAllProcess = new LinkedList<>();
         while (true) {
-            if(allProcess.size()==0) break;
+            if (allProcess.size() <= 1) break;
             for (int i = 0; i < allProcess.size(); i++) {
                 if (allProcess.get(i).getArrivalTime() == time) {
                     time = time + allProcess.get(i).getBurstTime();
                     newAllProcess.add(allProcess.remove(i));
                     int min = 9999;
                     Process p = null;
-                    for (int j = 0; j < allProcess.size(); j++) {
-                        if (allProcess.get(j).getArrivalTime() <= time) {
-                            if(allProcess.get(j).getBurstTime()<min){
-                                min = allProcess.get(j).getBurstTime();
-                                p = allProcess.get(j);
+                    while (p == null) {
+                        for (int j = 0; j < allProcess.size(); j++) {
+                            if (allProcess.get(j).getArrivalTime() <= time) {
+                                if (allProcess.get(j).getBurstTime() < min) {
+                                    min = allProcess.get(j).getBurstTime();
+                                    p = allProcess.get(j);
+                                }
                             }
                         }
+                        time++;
                     }
+
                     time = time + p.getBurstTime();
                     allProcess.remove(p);
                     newAllProcess.add(p);
@@ -177,8 +181,8 @@ public class Conversion {
             }
             time++;
         }
+        newAllProcess.add(allProcess.remove(0));
         allProcess = newAllProcess;
-        showSt();
     }
 
     public void cal() {
@@ -215,7 +219,7 @@ public class Conversion {
         return op;
     }
 
-    public void f1() {
+    public void f12() {
         int i = 0;
         int j = 0;
         int tt = 0;
@@ -237,7 +241,6 @@ public class Conversion {
                     int needTime = allProcess.get(j).getBurstTime();
                     int t = i;
                     while (i < t + needTime) {
-                        System.out.println(allProcess.get(j).getName() + "的runnedTime++");
                         allProcess.get(j).runnedTime++;
                         i++;
                         if (i == t + needTime) {
@@ -259,7 +262,6 @@ public class Conversion {
                     }
                     if (allProcess.get(j).runnedTime == needTime) {
                         j++;
-                        System.out.println("tt：" + tt);
                         if (tt == 1) {
                             i--;
                         }
@@ -268,6 +270,48 @@ public class Conversion {
                 i++;
             }
         }
+        cal();
+    }
+
+    public void f3() {
+        int time = 0;
+        int timeSize = 0;
+        String s = "";
+        System.out.println("输入时间片大小：");
+        timeSize = in.nextInt();
+        while (true) {
+            int tt = 1;
+            for (int k = 0; k < allProcess.size(); k++) {
+                if (allProcess.get(k).getFinishedTime() == -1) {
+                    tt = 0;
+                }
+            }
+            if (tt == 1) break;
+            int b = 0;
+            for (int i = 0; i < allProcess.size(); i++) {
+                if (allProcess.get(i).getArrivalTime() <= time && allProcess.get(i).getFinishedTime() == -1) {
+                    b = 1;
+                    if (allProcess.get(i).getBurstTime() - allProcess.get(i).runnedTime <= timeSize) {
+                        for (int m = 0; m < allProcess.get(i).getBurstTime() - allProcess.get(i).runnedTime; m++) {
+                            s += allProcess.get(i).getName() + " ";
+                        }
+                        time = time + allProcess.get(i).getBurstTime() - allProcess.get(i).runnedTime;
+                        allProcess.get(i).runnedTime = allProcess.get(i).getBurstTime();
+                        allProcess.get(i).setFinishedTime(time);
+                    } else {
+                        for (int m = 0; m < timeSize; m++) {
+                            s += allProcess.get(i).getName() + " ";
+                        }
+                        time = time + timeSize;
+                        allProcess.get(i).runnedTime += timeSize;
+                    }
+                }
+            }
+            if(b==0) {
+                time++;
+            }
+        }
+        System.out.println("执行顺序为："+s);
         cal();
     }
 

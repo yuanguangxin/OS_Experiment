@@ -334,9 +334,12 @@ public class Test {
                 c = in.nextInt();
                 if(c==1){
                     conversion.f1Sort();
-                    conversion.f1();
+                    conversion.f12();
                 }else if(c==2){
                     conversion.f2Sort();
+                    conversion.f12();
+                }else if(c==3){
+                    conversion.f3();
                 }
                 break;
         }
