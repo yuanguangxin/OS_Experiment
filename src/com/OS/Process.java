@@ -7,6 +7,34 @@ public class Process{
     private int totalPage;//进程总页数
     private PageList[] pageList_1;//页表1
     private PageList[] pageList_2;//页表2
+    private int arrivalTime;
+    private int burstTime;
+    private int finishedTime = -1;
+    public int runnedTime = 0;
+
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(int arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public int getBurstTime() {
+        return burstTime;
+    }
+
+    public void setBurstTime(int burstTime) {
+        this.burstTime = burstTime;
+    }
+
+    public int getFinishedTime() {
+        return finishedTime;
+    }
+
+    public void setFinishedTime(int finishedTime) {
+        this.finishedTime = finishedTime;
+    }
 
     public int getBlockSize() {
         return blockSize;

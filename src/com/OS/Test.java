@@ -28,6 +28,7 @@ public class Test {
         System.out.println("8.显示内存位示图");
         System.out.println("9.查看设备分配表");
         System.out.println("10.文件管理");
+        System.out.println("11.进程调度");
         System.out.println("0.退出");
         String processName;
         choose = in.nextInt();
@@ -39,6 +40,15 @@ public class Test {
                 int processSize;
                 System.out.println("请输入进程大小(单位:字节)");
                 processSize = in.nextInt();
+                int arrivalTime;
+                int burstTime;
+                System.out.println("请输入到达时间");
+                arrivalTime = in.nextInt();
+                System.out.println("请输入服务时间");
+                burstTime = in.nextInt();
+                process.setArrivalTime(arrivalTime);
+                process.setBurstTime(burstTime);
+
                 if(processSize>memory.getTotalSize()*1024){
                     System.out.println("超出最大内存！");
                     break;
@@ -314,6 +324,18 @@ public class Test {
                 break;
             case 10:
                 new CMD(1,8);
+                break;
+            case 11:
+                int c = 0;
+                System.out.println("请选择调度算法：");
+                System.out.println("1.先来先服务");
+                System.out.println("2.短作业优先");
+                System.out.println("3.时间片轮转");
+                c = in.nextInt();
+                if(c==1){
+                    conversion.f1Sort();
+                    conversion.f1();
+                }
                 break;
         }
         return choose;
