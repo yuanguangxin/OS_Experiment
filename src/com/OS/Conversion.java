@@ -150,6 +150,62 @@ public class Conversion {
         }
     }
 
+    public void f2Sort() {
+        int time = 0;
+        LinkedList<Process> newAllProcess = new LinkedList<>();
+        while (true) {
+            if(allProcess.size()==0) break;
+            for (int i = 0; i < allProcess.size(); i++) {
+                if (allProcess.get(i).getArrivalTime() == time) {
+                    time = time + allProcess.get(i).getBurstTime();
+                    newAllProcess.add(allProcess.remove(i));
+                    int min = 9999;
+                    Process p = null;
+                    for (int j = 0; j < allProcess.size(); j++) {
+                        if (allProcess.get(j).getArrivalTime() <= time) {
+                            if(allProcess.get(j).getBurstTime()<min){
+                                min = allProcess.get(j).getBurstTime();
+                                p = allProcess.get(j);
+                            }
+                        }
+                    }
+                    time = time + p.getBurstTime();
+                    allProcess.remove(p);
+                    newAllProcess.add(p);
+                    continue;
+                }
+            }
+            time++;
+        }
+        allProcess = newAllProcess;
+        showSt();
+    }
+
+    public void cal() {
+        double[] everyTime = new double[allProcess.size()];
+        double[] everyTime1 = new double[allProcess.size()];
+        for (int i = 0; i < allProcess.size(); i++) {
+            everyTime[i] = allProcess.get(i).getFinishedTime() - allProcess.get(i).getArrivalTime();
+            everyTime1[i] = everyTime[i] / allProcess.get(i).getBurstTime();
+        }
+        for (int i = 0; i < allProcess.size(); i++) {
+            System.out.println("进程名：" + allProcess.get(i).getName());
+            System.out.println("周转时间：" + everyTime[i]);
+            System.out.println("带权周转时间：" + everyTime1[i]);
+            System.out.println();
+        }
+        double total = 0;
+        for (int i = 0; i < allProcess.size(); i++) {
+            total = total + everyTime[i];
+        }
+        double total1 = 0;
+        for (int i = 0; i < allProcess.size(); i++) {
+            total1 = total1 + everyTime1[i];
+        }
+        System.out.println("平均周转时间：" + total / allProcess.size());
+        System.out.println("平均带权周转时间：" + total1 / allProcess.size());
+    }
+
     public int menu() {
         int op = 0;
         System.out.println("请选择：");
@@ -162,37 +218,57 @@ public class Conversion {
     public void f1() {
         int i = 0;
         int j = 0;
+        int tt = 0;
+        int op = -1;
         while (true) {
             if (j == allProcess.size()) break;
-            int op = menu();
+            if (tt == 0) {
+                op = menu();
+            } else {
+                tt = 0;
+            }
             if (op == 1) {
                 showSt();
                 System.out.println("当前时间：" + i);
                 continue;
             } else if (op == 2) {
+                System.out.println(allProcess.get(j).getName() + "的arrTime：" + allProcess.get(j).getArrivalTime());
                 if (allProcess.get(j).getArrivalTime() <= i) {
                     int needTime = allProcess.get(j).getBurstTime();
                     int t = i;
-                    while (i < t + allProcess.get(j).getBurstTime()) {
-                        i++;
+                    while (i < t + needTime) {
+                        System.out.println(allProcess.get(j).getName() + "的runnedTime++");
                         allProcess.get(j).runnedTime++;
-                        if (i == t + allProcess.get(j).getBurstTime()) {
+                        i++;
+                        if (i == t + needTime) {
                             allProcess.get(j).setFinishedTime(i);
                         }
                         while (true) {
                             op = menu();
-                            if (op == 2) break;
+                            if (op == 2) {
+                                if (allProcess.size() > j + 1) {
+                                    if (allProcess.get(j + 1).getArrivalTime() <= i + 1) {
+                                        tt = 1;
+                                    }
+                                }
+                                break;
+                            }
                             showSt();
                             System.out.println("当前时间：" + i);
                         }
                     }
                     if (allProcess.get(j).runnedTime == needTime) {
                         j++;
+                        System.out.println("tt：" + tt);
+                        if (tt == 1) {
+                            i--;
+                        }
                     }
                 }
                 i++;
             }
         }
+        cal();
     }
 
     public void showSt() {

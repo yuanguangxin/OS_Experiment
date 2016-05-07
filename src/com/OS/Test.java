@@ -335,6 +335,8 @@ public class Test {
                 if(c==1){
                     conversion.f1Sort();
                     conversion.f1();
+                }else if(c==2){
+                    conversion.f2Sort();
                 }
                 break;
         }
