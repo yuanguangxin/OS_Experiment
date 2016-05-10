@@ -17,6 +17,25 @@ public class Test {
         Scanner in = new Scanner(System.in);
         Conversion conversion = new Conversion();
         int choose = 0;
+//        Process p1 = new Process();
+//        Process p2 = new Process();
+//        Process p3 = new Process();
+//        p1.setName("a");
+//        p1.setArrivalTime(0);
+//        p1.setBurstTime(3);
+//
+//        p2.setName("b");
+//        p2.setArrivalTime(0);
+//        p2.setBurstTime(1);
+//
+//        p3.setName("c");
+//        p3.setArrivalTime(3);
+//        p3.setBurstTime(2);
+
+//        conversion.createProcess(p1);
+//        conversion.createProcess(p2);
+//        conversion.createProcess(p3);
+
         System.out.println("请输入数字控制进程");
         System.out.println("1.创建进程");
         System.out.println("2.时间片到");

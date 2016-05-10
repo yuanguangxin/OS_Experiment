@@ -155,10 +155,22 @@ public class Conversion {
         LinkedList<Process> newAllProcess = new LinkedList<>();
         while (true) {
             if (allProcess.size() <= 1) break;
+            int mm = 9999;
             for (int i = 0; i < allProcess.size(); i++) {
                 if (allProcess.get(i).getArrivalTime() == time) {
-                    time = time + allProcess.get(i).getBurstTime();
-                    newAllProcess.add(allProcess.remove(i));
+                    Process q = null;
+                    for(int p = 0;p<allProcess.size();p++){
+                        if (allProcess.get(p).getArrivalTime() <= time) {
+                            if (allProcess.get(p).getBurstTime() < mm) {
+                                mm = allProcess.get(p).getBurstTime();
+                                q = allProcess.get(p);
+                            }
+                        }
+                    }
+
+                    time = time + mm;
+                    allProcess.remove(q);
+                    newAllProcess.add(q);
                     int min = 9999;
                     Process p = null;
                     while (p == null) {
@@ -174,6 +186,7 @@ public class Conversion {
                     }
 
                     time = time + p.getBurstTime();
+
                     allProcess.remove(p);
                     newAllProcess.add(p);
                     continue;
@@ -181,7 +194,9 @@ public class Conversion {
             }
             time++;
         }
-        newAllProcess.add(allProcess.remove(0));
+        if(allProcess.size()!=0) {
+            newAllProcess.add(allProcess.remove(0));
+        }
         allProcess = newAllProcess;
     }
 
